@@ -1,17 +1,23 @@
 const TelegramBot = require('node-telegram-bot-api');
 const fs = require('fs');
 const pdf = require('pdf-parse');
-const { T5Tokenizer, T5ForConditionalGeneration } = require('t5-text-summary');
+const natural = require('natural');
 
 // Mengambil token bot dari environment variable
 const botToken = process.env.BOT_TOKEN;
 const bot = new TelegramBot(botToken, { polling: true });
 
-// Menginisialisasi tokenizer
-const tokenizer = new T5Tokenizer();
+// Fungsi untuk menangani perintah /pdf
+bot.onText(/\/pdf/, (msg) => {
+  const chatId = msg.chat.id;
+  bot.sendMessage(chatId, 'Silakan kirim file PDF untuk disederhanakan teksnya.');
+});
 
-// Menginisialisasi model pemrosesan bahasa
-const summarizationModel = new T5ForConditionalGeneration();
+// Fungsi untuk menangani perintah /text
+bot.onText(/\/text/, (msg) => {
+  const chatId = msg.chat.id;
+  bot.sendMessage(chatId, 'Silakan kirim teks untuk disederhanakan.');
+});
 
 // Fungsi untuk menangani pesan yang diterima
 bot.on('message', async (msg) => {
@@ -70,22 +76,25 @@ function extractTextFromPDF(filePath) {
 
 function summarizeText(text) {
   return new Promise((resolve, reject) => {
-    tokenizer
-      .encode(text)
-      .then((inputIds) => {
-        summarizationModel
-          .generate(inputIds)
-          .then((summaryIds) => {
-            const summary = tokenizer.decode(summaryIds);
-            resolve(summary);
-          })
-          .catch((error) => {
-            reject(error);
-          });
-      })
-      .catch((error) => {
-        reject(error);
-      });
+    // Proses ekstraksi fitur menggunakan algoritma TfIdf
+    const tokenizer = new natural.WordTokenizer();
+    const tfidf = new natural.TfIdf();
+    const sentences = tokenizer.tokenize(text);
+    sentences.forEach((sentence) => {
+      tfidf.addDocument(sentence);
+    });
+
+    // Mengambil 3 kalimat dengan bobot tertinggi
+    const summarySentences = [];
+    tfidf.listTerms(0).slice(0, 3).forEach((term) => {
+      const sentence = sentences[term.tfidf];
+      summarySentences.push(sentence);
+    });
+
+    // Menggabungkan kalimat-kalimat menjadi ringkasan
+    const summary = summarySentences.join(' ');
+
+    resolve(summary);
   });
 }
 
