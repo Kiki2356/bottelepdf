@@ -11,6 +11,6 @@
   "dependencies": {
     "node-telegram-bot-api": "^0.53.0",
     "pdf-parse": "^1.1.3",
-    "node-nlp": "^0.3.0"
+    "node-nlp": "^3.0.0"
   }
 }
