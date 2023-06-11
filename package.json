@@ -2,7 +2,7 @@
   "name": "telegram-bot",
   "version": "1.0.0",
   "description": "Bot Telegram dengan kemampuan ringkasan teks",
-  "main": "telegram_bot.js",
+  "main": "bot.js",
   "scripts": {
     "start": "node bot.js"
   },
