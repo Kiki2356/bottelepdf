@@ -7,6 +7,10 @@ const natural = require('natural');
 const botToken = process.env.BOT_TOKEN;
 const bot = new TelegramBot(botToken, { polling: true });
 
+// Inisialisasi tokenisasi dan stemmer
+const tokenizer = new natural.WordTokenizer();
+const stemmer = natural.PorterStemmer;
+
 // Fungsi untuk menangani perintah /pdf
 bot.onText(/\/pdf/, (msg) => {
   const chatId = msg.chat.id;
@@ -76,24 +80,14 @@ function extractTextFromPDF(filePath) {
 
 function summarizeText(text) {
   return new Promise((resolve, reject) => {
-    // Proses ekstraksi fitur menggunakan algoritma TfIdf
-    const tokenizer = new natural.WordTokenizer();
-    const tfidf = new natural.TfIdf();
-    const sentences = tokenizer.tokenize(text);
-    sentences.forEach((sentence) => {
-      tfidf.addDocument(sentence);
-    });
+    // Tokenisasi teks
+    const tokens = tokenizer.tokenize(text);
 
-    // Mengambil 3 kalimat dengan bobot tertinggi
-    const summarySentences = [];
-    tfidf.listTerms(0).slice(0, 3).forEach((term) => {
-      const sentence = sentences[term.tfidf];
-      summarySentences.push(sentence);
-    });
+    // Stemming kata-kata
+    const stemmedTokens = tokens.map((token) => stemmer.stem(token));
 
-    // Menggabungkan kalimat-kalimat menjadi ringkasan
-    const summary = summarySentences.join(' ');
-
+    // Menggabungkan kata-kata menjadi ringkasan
+    const summary = stemmedTokens.join(' ');
     resolve(summary);
   });
 }
