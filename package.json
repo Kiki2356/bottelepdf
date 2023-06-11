@@ -6,11 +6,11 @@
   "scripts": {
     "start": "node telegram_bot.js"
   },
-  "author": "Miftahul Rizki",
+  "author": "Your Name",
   "license": "MIT",
   "dependencies": {
     "node-telegram-bot-api": "^0.53.0",
     "pdf-parse": "^1.1.1",
-    "t5-text-summary": "^1.0.0"
+    "node-nlp": "^0.4.0"
   }
 }
