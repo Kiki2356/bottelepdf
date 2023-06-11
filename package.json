@@ -12,7 +12,6 @@
     "node-telegram-bot-api": "^0.53.0",
     "pdf-parse": "^1.1.1",
     "node-fetch": "^3.0.0",
-    "t5-text-summary": "git+https://github.com/laxmena/t5-text-summary.git",
     "pdfjs-dist": "^2.11.0",
     "node-nlp": "^3.0.0",
     "natural": "6.5.0"
