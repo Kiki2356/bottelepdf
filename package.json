@@ -5,7 +5,7 @@
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js"
-    "start": "npm init"
+    "start": "npm init -y"
   },
   "author": "Miftahul Rizki",
   "license": "MIT",
