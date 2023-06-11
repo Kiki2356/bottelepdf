@@ -1,7 +1,7 @@
 {
   "name": "telegram-bot",
   "version": "1.0.0",
-  "description": "Telegram bot for text summarization",
+  "description": "Telegram bot",
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js"
@@ -10,11 +10,10 @@
   "license": "MIT",
   "dependencies": {
     "node-telegram-bot-api": "^0.53.0",
-    "pdf-parse": "^1.1.1",
-    "node-nlp": "^3.0.0"
-    "fetch": "^1.1.0",
+    "pdf-parse": "^1.1.4",
     "node-fetch": "^3.0.0",
     "t5-text-summary": "git+https://github.com/laxmena/t5-text-summary.git",
-    "pdfjs-dist": "^2.11.0"
+    "pdfjs-dist": "^2.11.0",
+    "node-nlp": "^0.5.4"
   }
 }
