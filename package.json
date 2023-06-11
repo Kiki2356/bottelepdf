@@ -1,0 +1,16 @@
+{
+  "name": "telegram-bot",
+  "version": "1.0.0",
+  "description": "Bot Telegram dengan kemampuan ringkasan teks",
+  "main": "telegram_bot.js",
+  "scripts": {
+    "start": "node telegram_bot.js"
+  },
+  "author": "Miftahul Rizki",
+  "license": "MIT",
+  "dependencies": {
+    "node-telegram-bot-api": "^0.53.0",
+    "pdf-parse": "^1.1.1",
+    "t5-text-summary": "^1.0.0"
+  }
+}
