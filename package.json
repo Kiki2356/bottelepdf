@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node telegram_bot.js"
   },
-  "author": "Your Name",
+  "author": "Miftahul Rizki",
   "license": "MIT",
   "dependencies": {
     "node-telegram-bot-api": "^0.53.0",
