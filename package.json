@@ -10,10 +10,6 @@
   "license": "MIT",
   "dependencies": {
     "node-telegram-bot-api": "^0.53.0",
-    "pdf-parse": "^1.1.1",
-    "node-fetch": "^3.0.0",
-    "pdfjs-dist": "^2.11.0",
-    "node-nlp": "^3.0.0",
-    "natural": "6.5.0"
+    "pdf.js-extract": "^1.0.4" 
   }
 }
