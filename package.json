@@ -10,6 +10,6 @@
   "license": "MIT",
   "dependencies": {
     "node-telegram-bot-api": "^0.53.0",
-    "pdf.js-extract": "^1.0.4" 
+    "pdf.js-extract": "^0.2.1" 
   }
 }
