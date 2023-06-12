@@ -1,56 +1,85 @@
 const TelegramBot = require('node-telegram-bot-api');
 const fs = require('fs');
-const pdf = require('pdf-parse');
-const natural = require('natural');
+const { PDFExtract } = require('pdf.js-extract');
 
+// Mengambil token bot dari environment variable
 const botToken = process.env.BOT_TOKEN;
 const bot = new TelegramBot(botToken, { polling: true });
 
-const tokenizer = new natural.WordTokenizer();
-const stemmer = natural.PorterStemmer;
-
+// Fungsi untuk menangani perintah /pdf
 bot.onText(/\/pdf/, (msg) => {
-  bot.sendMessage(msg.chat.id, 'Silakan kirim file PDF untuk disederhanakan teksnya.');
+  const chatId = msg.chat.id;
+  bot.sendMessage(chatId, 'Silakan kirim file PDF untuk disederhanakan teksnya.');
 });
 
+// Fungsi untuk menangani perintah /text
 bot.onText(/\/text/, (msg) => {
-  bot.sendMessage(msg.chat.id, 'Silakan kirim teks untuk disederhanakan.');
+  const chatId = msg.chat.id;
+  bot.sendMessage(chatId, 'Silakan kirim teks untuk disederhanakan.');
 });
 
+// Fungsi untuk menangani pesan yang diterima
 bot.on('message', (msg) => {
   const chatId = msg.chat.id;
 
-  if (msg.document) {
-    const filePath = `./input.pdf`;
+  // Cek jika pesan berisi file PDF
+  if (msg.document && msg.document.mime_type === 'application/pdf') {
+    const fileId = msg.document.file_id;
+    const filePath = `./${fileId}.pdf`;
 
-    const file = fs.createWriteStream(filePath);
-    file.on('close', () => {
-      extractTextFromPDF(filePath)
-        .then((text) => summarizeText(text))
-        .then((summary) => bot.sendMessage(chatId, summary))
-        .catch((error) => {
-          console.error(error);
-          bot.sendMessage(chatId, 'Terjadi kesalahan saat menyederhanakan teks.');
-        });
-    });
+    bot.downloadFile(fileId, filePath)
+      .then(() => {
+        extractTextFromPDF(filePath)
+          .then((text) => {
+            summarizeText(text)
+              .then((summary) => {
+                bot.sendMessage(chatId, summary);
+              })
+              .catch(() => {
+                bot.sendMessage(chatId, 'Terjadi kesalahan saat menyederhanakan teks.');
+              });
+          })
+          .catch(() => {
+            bot.sendMessage(chatId, 'Terjadi kesalahan saat mengekstraksi teks dari PDF.');
+          });
+      })
+      .catch(() => {
+        bot.sendMessage(chatId, 'Terjadi kesalahan saat mengunduh file PDF.');
+      });
   } else {
-    summarizeText(msg.text)
-      .then((summary) => bot.sendMessage(chatId, summary))
-      .catch((error) => {
-        console.error(error);
+    const text = msg.text;
+    summarizeText(text)
+      .then((summary) => {
+        bot.sendMessage(chatId, summary);
+      })
+      .catch(() => {
         bot.sendMessage(chatId, 'Terjadi kesalahan saat menyederhanakan teks.');
       });
   }
 });
 
 function extractTextFromPDF(filePath) {
-  return pdf(fs.readFileSync(filePath)).then((data) => data.text);
+  return new Promise((resolve, reject) => {
+    const pdfExtract = new PDFExtract();
+    pdfExtract.extract(filePath, {}, (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        const pages = data.pages.map((page) => page.content);
+        const text = pages.join(' ');
+        resolve(text);
+      }
+    });
+  });
 }
 
 function summarizeText(text) {
-  const tokens = tokenizer.tokenize(text);
-  const stemmedTokens = tokens.map((token) => stemmer.stem(token));
-  return Promise.resolve(stemmedTokens.join(' '));
+  return new Promise((resolve) => {
+    // Implementasikan algoritma penyederhanaan teks sesuai kebutuhan
+    // Contoh: Mengambil 100 karakter pertama
+    const summary = text.substring(0, 100);
+    resolve(summary);
+  });
 }
 
 console.log('Bot is running...');
