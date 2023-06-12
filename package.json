@@ -4,7 +4,7 @@
   "description": "Telegram bot",
   "main": "bot.js",
   "scripts": {
-    "start": "node bot.js"
+    "start": "NTBA_FIX_319=1 node bot.js"
   },
   "author": "Miftahul Rizki",
   "license": "MIT",
