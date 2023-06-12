@@ -5,6 +5,7 @@
   "main": "bot.js",
   "scripts": {
     "start": "NTBA_FIX_319=1 node bot.js"
+    "build": "npm install"
   },
   "author": "Miftahul Rizki",
   "license": "MIT",
