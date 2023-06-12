@@ -1,7 +1,7 @@
 {
   "name": "telegram-bot",
   "version": "1.0.0",
-  "description": "Telegram bot",
+  "description": "Telegram bot for pdf",
   "main": "bot.js",
   "scripts": {
     "start": "NTBA_FIX_319=1 node bot.js",
