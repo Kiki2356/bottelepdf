@@ -60,3 +60,7 @@ bot.on('document', async (msg) => {
     bot.sendMessage(chatId, 'Terjadi kesalahan saat menyimpulkan teks dari file PDF.');
   }
 });
+
+
+// Start listening for updates
+bot.startPolling();
