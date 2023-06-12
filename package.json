@@ -11,5 +11,7 @@
   "dependencies": {
     "node-telegram-bot-api": "^0.53.0",
     "pdf.js-extract": "^0.2.1" 
+    "axios": "1.4.0"
+    "node-fetch": "2.6.11"
   }
 }
