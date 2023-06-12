@@ -1,5 +1,7 @@
 const TelegramBot = require('node-telegram-bot-api');
 const PDFExtract = require('pdf.js-extract').PDFExtract;
+const fetch = require('node-fetch');
+const fs = require('fs');
 
 // Mengambil token bot dari environment variable
 const botToken = process.env.BOT_TOKEN;
@@ -37,11 +39,10 @@ bot.onText(/\/summarize/, (msg) => {
 });
 
 // Fungsi untuk menangani pesan yang diterima
-bot.on('message', async (msg) => {
+bot.on('document', async (msg) => {
   const chatId = msg.chat.id;
-
-  // Cek jika pesan berisi file PDF
-  if (msg.document) {
+  
+  try {
     const fileLink = await bot.getFileLink(msg.document.file_id);
     const filePath = `./input.pdf`;
 
@@ -50,14 +51,12 @@ bot.on('message', async (msg) => {
     const buffer = await response.buffer();
     fs.writeFileSync(filePath, buffer);
 
-    try {
-      const summary = await summarizePDF(filePath);
-      bot.sendMessage(chatId, summary);
-    } catch (error) {
-      console.error(error);
-      bot.sendMessage(chatId, 'Terjadi kesalahan saat menyimpulkan teks dari file PDF.');
-    } finally {
-      fs.unlinkSync(filePath); // Hapus file PDF setelah digunakan
-    }
+    const summary = await summarizePDF(filePath);
+    bot.sendMessage(chatId, summary);
+
+    fs.unlinkSync(filePath); // Hapus file PDF setelah digunakan
+  } catch (error) {
+    console.error(error);
+    bot.sendMessage(chatId, 'Terjadi kesalahan saat menyimpulkan teks dari file PDF.');
   }
 });
