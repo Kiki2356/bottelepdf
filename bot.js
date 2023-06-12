@@ -5,7 +5,7 @@ const fs = require('fs');
 
 // Mengambil token bot dari environment variable
 const botToken = process.env.BOT_TOKEN;
-const bot = new TelegramBot(botToken);
+const bot = new TelegramBot(botToken, { polling: true });
 
 // Fungsi untuk menyimpulkan teks dari file PDF
 async function summarizePDF(filePath) {
@@ -61,5 +61,7 @@ bot.on('document', async (msg) => {
   }
 });
 
-// Start listening for updates
-bot.startPolling();
+// Listen on port 80
+const port = process.env.PORT || 80;
+bot.setWebHook(`https://api.telegram.org/bot5649401123:AAHTSgP6QUicvDKb91i719Klf_Kq-7sbOw0/setWebhook?url=https://different-ruby-cow.cyclic.app:80 `);
+ 
